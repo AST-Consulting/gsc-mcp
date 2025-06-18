@@ -1,17 +1,26 @@
 {
   "type": "module",
-  "name": "googlesearchconsole-mcp",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "gsc-mcp",
+  "version": "1.0.1",
+  "main": "dist/index.js",
   "bin": {
-    "googlesearchconsole_mcp": "./build/index.js"
+    "gsc-mcp": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsc && chmod 755 build/index.js"
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "files": [
     "build"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AST-Consulting/gsc-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AST-Consulting/gsc-mcp/issues"
+  },
+  "homepage": "https://github.com/AST-Consulting/gsc-mcp/blob/main/README.md",
   "keywords": [
     "googlesearchconsole",
     "mcp",
@@ -19,9 +28,9 @@
     "google",
     "searchconsole"
   ],
-  "author": "",
+  "author": "AST Consulting",
   "license": "ISC",
-  "description": "",
+  "description": "Google Search Console MCP",
   "dependencies": {
     "@google-cloud/local-auth": "^3.0.1",
     "@modelcontextprotocol/sdk": "^1.12.3",

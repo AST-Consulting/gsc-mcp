@@ -1,18 +1,11 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import {
-  GetSitemapSchema,
-  IndexInspectSchema,
-  ListSitemapsSchema,
-  SearchAnalyticsSchema,
-  SubmitSitemapSchema,
-} from "./schemas.js";
 import { z } from "zod";
 import { SearchConsoleService } from "./search-console.js";
 
 const server = new McpServer({
-  name: "googlesearchconsole_mcp",
+  name: "gsc-mcp",
   description:
     "Google Search Console MCP Server. Provides access to Google Search Console tools and data.",
   version: "0.1.0",
@@ -27,49 +20,92 @@ if (!GOOGLE_APPLICATION_CREDENTIALS) {
   process.exit(1);
 }
 
-const searchConsole = new SearchConsoleService(GOOGLE_APPLICATION_CREDENTIALS);
+const SearchAnalyticsSchema = {
+  siteUrl: z
+    .string()
+    .describe(
+      "The site URL as defined in Search Console. Example: sc-domain:example.com (for domain resources) or http://www.example.com/ (for site prefix resources)"
+    ),
+  startDate: z.string().describe("Start date in YYYY-MM-DD format"),
+  endDate: z.string().describe("End date in YYYY-MM-DD format"),
+  dimensions: z
+    .string()
+    .transform((val) => val.split(","))
+    .refine((val) =>
+      val.every((d) =>
+        ["query", "page", "country", "device", "searchAppearance"].includes(d)
+      )
+    )
+    .optional()
+    .describe(
+      "Comma-separated list of dimensions to break down results by, such as query, page, country, device, searchAppearance"
+    ),
+  type: z
+    .enum(["web", "image", "video", "news"])
+    .optional()
+    .describe("Type of search to filter by, such as web, image, video, news"),
+  aggregationType: z
+    .enum(["auto", "byNewsShowcasePanel", "byProperty", "byPage"])
+    .optional()
+    .describe(
+      "Type of aggregation, such as auto, byNewsShowcasePanel, byProperty, byPage"
+    ),
+  rowLimit: z
+    .number()
+    .default(1000)
+    .describe("Maximum number of rows to return"),
+};
 
-//MCP Tools Registration
+const ListSitemapsSchema = {
+  sitemapIndex: z
+    .string()
+    .optional()
+    .describe(
+      "A URL of a site's sitemap index. For example: http://www.example.com/sitemapindex.xml"
+    ),
+  siteUrl: z
+    .string()
+    .optional()
+    .describe(
+      "The site's URL, including protocol. For example: http://www.example.com/"
+    ),
+};
+
+const GetSitemapSchema = {
+  feedpath: z
+    .string()
+    .optional()
+    .describe(
+      "The URL of the actual sitemap. For example: http://www.example.com/sitemap.xml"
+    ),
+  siteUrl: z
+    .string()
+    .optional()
+    .describe(
+      "The site's URL, including protocol. For example: http://www.example.com/"
+    ),
+};
+
+const SubmitSitemapSchema = {
+  feedpath: z
+    .string()
+    .describe(
+      "The URL of the sitemap to add. For example: http://www.example.com/sitemap.xml"
+    ),
+  siteUrl: z
+    .string()
+    .describe(
+      "The site's URL, including protocol. For example: http://www.example.com/"
+    ),
+};
+
+const searchConsole = new SearchConsoleService(GOOGLE_APPLICATION_CREDENTIALS);
 
 //Tool 1: search_analytics
 server.tool(
   "search_analytics",
   "Get search performance data from Google Search Console",
-  {
-    siteUrl: z
-      .string()
-      .describe(
-        "The site URL as defined in Search Console. Example: sc-domain:example.com (for domain resources) or http://www.example.com/ (for site prefix resources)"
-      ),
-    startDate: z.string().describe("Start date in YYYY-MM-DD format"),
-    endDate: z.string().describe("End date in YYYY-MM-DD format"),
-    dimensions: z
-      .string()
-      .transform((val) => val.split(","))
-      .refine((val) =>
-        val.every((d) =>
-          ["query", "page", "country", "device", "searchAppearance"].includes(d)
-        )
-      )
-      .optional()
-      .describe(
-        "Comma-separated list of dimensions to break down results by, such as query, page, country, device, searchAppearance"
-      ),
-    type: z
-      .enum(["web", "image", "video", "news"])
-      .optional()
-      .describe("Type of search to filter by, such as web, image, video, news"),
-    aggregationType: z
-      .enum(["auto", "byNewsShowcasePanel", "byProperty", "byPage"])
-      .optional()
-      .describe(
-        "Type of aggregation, such as auto, byNewsShowcasePanel, byProperty, byPage"
-      ),
-    rowLimit: z
-      .number()
-      .default(1000)
-      .describe("Maximum number of rows to return"),
-  },
+  SearchAnalyticsSchema,
   async (args) => {
     const siteUrl = args.siteUrl;
     const requestBody = {
