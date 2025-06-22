@@ -1,8 +1,11 @@
+#!/usr/bin/env node
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+// @ts-ignore
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { z } from "zod";
-import { SearchConsoleService } from "./search-console.js";
+import { SearchConsoleService } from "./searchConsoleService.js";
 
 const server = new McpServer({
   name: "gsc-mcp",

@@ -1,46 +1,34 @@
 {
-  "type": "module",
   "name": "gsc-mcp",
-  "version": "1.0.1",
-  "main": "dist/index.js",
+  "version": "1.0.3",
+  "description": "Google Search Console MCP (Model Context Protocol)",
+  "author": "AST Consulting",
+  "license": "MIT",
+  "type": "module",
   "bin": {
-    "gsc-mcp": "./dist/index.js"
-  },
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js"
+    "sumitpandey": "dist/index.js"
   },
   "files": [
-    "build"
+    "dist"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AST-Consulting/gsc-mcp.git"
+  "scripts": {
+    "build": "tsc && shx chmod +x dist/*.js",
+    "prepare": "npm run build",
+    "watch": "tsc --watch"
   },
-  "bugs": {
-    "url": "https://github.com/AST-Consulting/gsc-mcp/issues"
-  },
-  "homepage": "https://github.com/AST-Consulting/gsc-mcp/blob/main/README.md",
-  "keywords": [
-    "googlesearchconsole",
-    "mcp",
-    "modelcontextprotocol",
-    "google",
-    "searchconsole"
-  ],
-  "author": "AST Consulting",
-  "license": "ISC",
-  "description": "Google Search Console MCP",
+  "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c",
   "dependencies": {
     "@google-cloud/local-auth": "^3.0.1",
-    "@modelcontextprotocol/sdk": "^1.12.3",
-    "google-auth-library": "^10.1.0",
-    "googleapis": "^150.0.1",
-    "zod": "^3.25.64",
-    "zod-to-json-schema": "^3.24.5"
+    "@modelcontextprotocol/sdk": "^1.0.1",
+    "google-auth-library": "^9.15.0",
+    "googleapis": "^144.0.0",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.5"
   },
   "devDependencies": {
-    "@types/node": "^24.0.2",
-    "typescript": "^5.8.3"
+    "@types/node": "^22.10.1",
+    "shx": "^0.3.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
   }
 }

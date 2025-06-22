@@ -1,5 +1,11 @@
-node_modules/
-dist/
-build/
-.vscode/
-test.txt
+node_modules
+.env
+todo
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+coverage
+dist
+build
+.vscode
