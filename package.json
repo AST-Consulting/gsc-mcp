@@ -6,7 +6,12 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "sumitpandey": "dist/index.js"
+    "gsc-mcp": "dist/index.js"
+  },
+  "homepage": "https://astconsulting.in/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AST-Consulting/gsc-mcp.git"
   },
   "files": [
     "dist"
@@ -20,6 +25,7 @@
   "dependencies": {
     "@google-cloud/local-auth": "^3.0.1",
     "@modelcontextprotocol/sdk": "^1.0.1",
+    "express": "^5.1.0",
     "google-auth-library": "^9.15.0",
     "googleapis": "^144.0.0",
     "zod": "^3.23.8",
@@ -30,5 +36,13 @@
     "shx": "^0.3.4",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
-  }
+  },
+  "keywords": [
+    "mcp",
+    "google search console",
+    "SEO",
+    "model-context-protocol",
+    "claude",
+    "playwright"
+  ]
 }
